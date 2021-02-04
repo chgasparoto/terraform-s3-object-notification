@@ -69,21 +69,20 @@ module "redirect" {
 
   notification_topic = {
     topic_arn     = aws_sns_topic.topic.arn
-    events        = ["s3:ObjectCreated:*"]
+    events        = "s3:ObjectCreated:*"
     filter_suffix = ".log"
   }
 
   notification_queue = {
     queue_arn     = aws_sqs_queue.queue.arn
-    events        = ["s3:ObjectCreated:*"]
-    filter_suffix = ".log"
+    events        = "s3:ObjectCreated:*"
+    filter_suffix = ".jpg"
   }
 
   notification_lambda = {
     lambda_function_arn = aws_lambda_function.func.arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/"
-    filter_suffix       = ".log"
+    events              = "s3:ObjectCreated:*"
+    filter_suffix       = ".png"
   }
 }
 ```
@@ -94,7 +93,7 @@ module "redirect" {
 |name|Bucket unique name|string|null| ✅ |
 |acl|Bucket ACL|string|private|  |
 |policy|Bucket Policy|string|""|  |
-|policy|Bucket Tags|map(string)|{}|  |
+|tags|Bucket Tags|map(string)|{}|  |
 |key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|string|""|  |
 |filepath|The local path where the desired files will be uploaded to the bucket|string|""|  |
 |versioning|Map containing versioning configuration|map(string)|{}|  |

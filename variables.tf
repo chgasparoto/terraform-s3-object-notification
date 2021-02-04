@@ -52,19 +52,19 @@ variable "logging" {
 }
 
 variable "notification_topic" {
-  description = "Map containing topic notification configuration."
-  type        = map(string)
-  default     = {}
+  description = "List of maps containing topic notification configuration."
+  type        = list(map(string))
+  default     = []
 }
 
 variable "notification_queue" {
-  description = "Map containing queue notification configuration."
-  type        = map(string)
-  default     = {}
+  description = "List of maps containing queue notification configuration."
+  type        = list(map(string))
+  default     = []
 }
 
 variable "notification_lambda" {
-  description = "Map containing lambda notification configuration."
-  type        = map(string)
-  default     = {}
+  description = "List of maps containing lambda notification configuration."
+  type        = list(map(string))
+  default     = []
 }

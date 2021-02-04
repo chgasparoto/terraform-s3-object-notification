@@ -33,18 +33,19 @@ resource "aws_s3_bucket" "this" {
 }
 
 module "objects" {
-  source = "./object"
+  source = "./modules/object"
 
-  bucket = aws_s3_bucket.this.bucket
-  filepath = var.filepath
+  bucket     = aws_s3_bucket.this.bucket
+  filepath   = var.filepath
   key_prefix = var.key_prefix
 }
 
 module "notification" {
-  source = "./notification"
+  source = "./modules/notification"
 
-  bucket = aws_s3_bucket.this.bucket
-  topic  = var.notification_topic
-  queue  = var.notification_queue
-  lambda = var.notification_lambda
+  bucket          = aws_s3_bucket.this.bucket
+  bucket_arn      = aws_s3_bucket.this.arn
+  topic           = var.notification_topic
+  queue           = var.notification_queue
+  lambda_function = var.notification_lambda
 }
