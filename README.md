@@ -96,7 +96,7 @@ module "redirect" {
 |policy|Bucket Policy|string|""|  |
 |policy|Bucket Tags|map(string)|{}|  |
 |key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|string|""|  |
-|file_path|The local path where the desired files will be uploaded to the bucket|string|""|  |
+|filepath|The local path where the desired files will be uploaded to the bucket|string|""|  |
 |versioning|Map containing versioning configuration|map(string)|{}|  |
 |website|Map containing website configuration|map(string)|{}|  |
 |logging|Map containing logging configuration|map(string)|{}|  |

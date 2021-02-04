@@ -4,13 +4,13 @@ variable "bucket" {
   default     = ""
 }
 
-variable "key" {
+variable "key_prefix" {
   description = "Object key"
   type        = string
   default     = ""
 }
 
-variable "src" {
+variable "filepath" {
   description = "Object source location. E.g.: 'path/to/my/website'"
   type        = string
   default     = ""

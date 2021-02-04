@@ -35,11 +35,9 @@ resource "aws_s3_bucket" "this" {
 module "objects" {
   source = "./object"
 
-  for_each = var.filepath != "" ? fileset(var.filepath, "**") : []
-
   bucket = aws_s3_bucket.this.bucket
-  key    = "${var.key_prefix}/${each.value}"
-  src    = "${var.filepath}/${each.value}"
+  filepath = var.filepath
+  key_prefix = var.key_prefix
 }
 
 module "notification" {
