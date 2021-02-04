@@ -86,6 +86,13 @@ module "redirect" {
   }
 }
 ```
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.10 |
+| aws | >= 3.0 |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
