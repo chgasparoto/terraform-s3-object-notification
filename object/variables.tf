@@ -1,16 +1,19 @@
 variable "bucket" {
   description = "Bucket name"
   type        = string
+  default     = ""
 }
 
 variable "key" {
   description = "Object key"
   type        = string
+  default     = ""
 }
 
 variable "src" {
-  description = "Object source location. E.g.: \"${path.root}/website\""
+  description = "Object source location. E.g.: 'path/to/my/website'"
   type        = string
+  default     = ""
 }
 
 # https://github.com/hashicorp/terraform-template-dir/blob/master/variables.tf
