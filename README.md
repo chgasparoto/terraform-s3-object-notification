@@ -12,19 +12,9 @@ These types of resources are supported:
 
 ```hcl
 module "bucket" {
-  source = "https://github.com/chgasparoto/terraform-s3-object-notification"
+  source = "github.com/chgasparoto/terraform-s3-object-notification"
+  
   name   = "my-super-unique-bucket-name"
-}
-```
-
-## Examples
-
-### Static Website with Versioning and Logging
-```hcl
-module "website" {
-  source = "https://github.com/chgasparoto/terraform-s3-object-notification"
-
-  name   = "my-website-domain"
   acl    = "public-read"
   policy = data.template_file.s3-public-policy.rendered
 
@@ -43,49 +33,34 @@ module "website" {
     target_bucket = module.logs.name
     target_prefix = "access/"
   }
-}
-```
 
-### Redirect
-```hcl
-module "redirect" {
-  source = "https://github.com/chgasparoto/terraform-s3-object-notification"
-  
-  name = "www.${local.domain}"
-  acl  = "public-read"
-
-  website = {
-    redirect_all_requests_to = local.domain
-  }
-}
-```
-
-### Notification
-```hcl
-module "redirect" {
-  source = "https://github.com/chgasparoto/terraform-s3-object-notification"
-  
-  name = "my-unique-awsome-bucket-name"
-
-  notification_topic = {
+    notification_topic = [{
     topic_arn     = aws_sns_topic.topic.arn
     events        = "s3:ObjectCreated:*"
     filter_suffix = ".log"
-  }
+  }]
 
-  notification_queue = {
+  notification_queue = [{
     queue_arn     = aws_sqs_queue.queue.arn
-    events        = "s3:ObjectCreated:*"
+    events        = "s3:ObjectCreated:*,s3:ObjectRemoved:*"
     filter_suffix = ".jpg"
-  }
+  }]
 
-  notification_lambda = {
+  # This property creates the needed permissions for the bucket be able to call the lambda.
+  notification_lambda = [{
     lambda_function_arn = aws_lambda_function.func.arn
-    events              = "s3:ObjectCreated:*"
+    events              = join(",", ["s3:ObjectCreated:*", "s3:ObjectRemoved:*])
     filter_suffix       = ".png"
-  }
+  }]
 }
 ```
+
+## Examples
+
+- [Simple Bucket](examples/simple-bucket)
+- [Static Website](examples/static-website)
+- [S3 Notifications](examples/s3-notifications)
+
 ## Requirements
 
 | Name | Version |
@@ -97,18 +72,18 @@ module "redirect" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-|name|Bucket unique name|string|null| ✅ |
-|acl|Bucket ACL|string|private|  |
-|policy|Bucket Policy|string|""|  |
-|tags|Bucket Tags|map(string)|{}|  |
-|key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|string|""|  |
-|filepath|The local path where the desired files will be uploaded to the bucket|string|""|  |
-|versioning|Map containing versioning configuration|map(string)|{}|  |
-|website|Map containing website configuration|map(string)|{}|  |
-|logging|Map containing logging configuration|map(string)|{}|  |
-|notification_topic|Map containing notification_topic configuration|map(string)|{}|  |
-|notification_queue|Map containing notification_queue configuration|map(string)|{}|  |
-|notification_lambda|Map containing notification_lambda configuration|map(string)|{}|  |
+|name|Bucket unique name|`string`|`null`| ✅ |
+|acl|Bucket ACL|`string`|`private`|  |
+|policy|Bucket Policy|`string`||  |
+|tags|Bucket Tags|`map(string)`|`{}`|  |
+|key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|`string`||  |
+|filepath|The local path where the desired files will be uploaded to the bucket|`string`||  |
+|versioning|Map containing versioning configuration|`map(string)`|`{}`|  |
+|website|Map containing website configuration|`map(string)`|`{}`|  |
+|logging|Map containing logging configuration|`map(string)`|`{}`|  |
+|notification_topic|List of maps containing notification_topic configuration|`list(map(string))`|`[{}]`|  |
+|notification_queue|List of maps containing notification_queue configuration|`list(map(string))`|`[{}]`|  |
+|notification_lambda|List of maps containing notification_lambda configuration|`list(map(string))`|`[{}]`|  |
 
 ## Outputs
 

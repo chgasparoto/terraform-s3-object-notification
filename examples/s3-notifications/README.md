@@ -33,5 +33,4 @@ No input.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
+No output.

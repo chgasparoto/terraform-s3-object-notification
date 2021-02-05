@@ -1,6 +1,6 @@
-# S3 Notifications
+# S3 Static Website with Versioning and Logging
 
-Configuration in this directory creates set of S3 notifications (SNS, SQS and Lambda).
+Configuration in this directory creates set of S3 buckets in order to generated a full Static Website.
 
 ## Usage
 
@@ -33,5 +33,4 @@ No input.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
+No output.

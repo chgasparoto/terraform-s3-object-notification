@@ -1,6 +1,6 @@
-# S3 Notifications
+# Simple bucket with default settings
 
-Configuration in this directory creates set of S3 notifications (SNS, SQS and Lambda).
+Configuration in this directory creates a simple S3 bucket with all default settings.
 
 ## Usage
 
@@ -35,3 +35,4 @@ No input.
 
 | Name | Description |
 |------|-------------|
+|ARN|Bucket ARN|
