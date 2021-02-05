@@ -66,12 +66,12 @@ data "aws_iam_policy_document" "s3" {
 }
 
 resource "aws_iam_role" "s3" {
-  name               = "${aws_lambda_function.s3.function_name}-lambda-role"
+  name               = "s3-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.lambda-assume-role.json
 }
 
 resource "aws_iam_policy" "s3" {
-  name   = "${aws_lambda_function.s3.function_name}-lambda-execute-policy"
+  name   = "s3-lambda-execute-policy"
   policy = data.aws_iam_policy_document.s3.json
 }
 
