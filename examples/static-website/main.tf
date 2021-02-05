@@ -1,65 +1,48 @@
-resource "aws_sns_topic" "this" {
-  name   = "my-sns-test-topic"
-  policy = <<POLICY
-{
-    "Version":"2012-10-17",
-    "Statement":[{
-        "Effect": "Allow",
-        "Principal": {"AWS":"*"},
-        "Action": "SNS:Publish",
-        "Resource": "arn:aws:sns:*:*:my-sns-test-topic",
-        "Condition":{
-            "ArnLike":{"aws:SourceArn":"${module.bucket.arn}"}
-        }
-    }]
+locals {
+  domain = "my-custom-url.com"
 }
-POLICY
+data "template_file" "s3-public-policy" {
+  template = file("policy.json")
+  vars     = { bucket_name = local.domain }
 }
 
-resource "aws_sqs_queue" "queue" {
-  name = "s3-event-notification-queue"
+module "logs" {
+  source = "github.com/chgasparoto/terraform-s3-object-notification"
 
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "arn:aws:sqs:*:*:s3-event-notification-queue",
-      "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${module.bucket.arn}" }
-      }
-    }
-  ]
-}
-POLICY
+  name = "${local.domain}-logs"
+  acl  = "log-delivery-write"
 }
 
-module "bucket" {
-  source = "../"
-  name   = "my-test-bucket-from-my-module-123456"
+module "website" {
+  source = "github.com/chgasparoto/terraform-s3-object-notification"
 
-  notification_topic = [{
-    topic_arn     = aws_sns_topic.this.arn
-    events        = "s3:ObjectCreated:*"
-    filter_suffix = ".log"
-    },
-    {
-      topic_arn = aws_sns_topic.this.arn
-      events    = "s3:ObjectRemoved:*"
-  }]
+  name   = local.domain
+  acl    = "public-read"
+  policy = data.template_file.s3-public-policy.rendered
 
-  notification_queue = [{
-    queue_arn     = aws_sqs_queue.queue.arn
-    events        = "s3:ObjectCreated:*"
-    filter_suffix = ".jpg"
-  }]
+  versioning = {
+    enabled = true
+  }
 
-  notification_lambda = [{
-    lambda_function_arn = "arn:aws:lambda:us-east-2:123456789012:function:my-function:1"
-    events              = "s3:ObjectCreated:*"
-    filter_suffix       = ".png"
-  }]
+  files = "${path.root}/../website"
+  website = {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+
+  logging = {
+    target_bucket = module.logs.name
+    target_prefix = "access/"
+  }
+}
+
+module "redirect" {
+  source = "github.com/chgasparoto/terraform-s3-object-notification"
+
+  name = "www.${local.domain}"
+  acl  = "public-read"
+
+  website = {
+    redirect_all_requests_to = local.domain
+  }
 }
