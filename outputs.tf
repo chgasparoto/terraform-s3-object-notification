@@ -29,3 +29,7 @@ output "hosted_zone_id" {
 output "objects" {
   value = [for filename, data in module.objects : filename]
 }
+
+output "notifications" {
+  value = module.notification.notification
+}

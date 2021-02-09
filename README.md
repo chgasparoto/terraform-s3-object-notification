@@ -13,7 +13,7 @@ These types of resources are supported:
 ```hcl
 module "bucket" {
   source = "github.com/chgasparoto/terraform-s3-object-notification"
-  
+
   name   = "my-super-unique-bucket-name"
   acl    = "public-read"
   policy = data.template_file.s3-public-policy.rendered
@@ -97,6 +97,7 @@ module "bucket" {
 |website_domain|The domain of the website endpoint, if the bucket is configured with a website. If not, this will be an empty string. This is used to create Route 53 alias records.|
 |hosted_zone_id|The Route 53 Hosted Zone ID for this bucket's region|
 |objects|List of objects uploaded to the bucket|
+|notifications|Map of bucket notifications (lambda, queue and, topic)|
 
 ## Authors
 
