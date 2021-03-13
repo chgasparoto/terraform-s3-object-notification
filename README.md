@@ -75,6 +75,7 @@ module "bucket" {
 |name|Bucket unique name|`string`|`null`| ✅ |
 |acl|Bucket ACL|`string`|`private`|  |
 |policy|Bucket Policy|`string`||  |
+|force_destroy|Whether or not to force destroy the bucket|`bool`|`false`|  |
 |tags|Bucket Tags|`map(string)`|`{}`|  |
 |key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|`string`||  |
 |filepath|The local path where the desired files will be uploaded to the bucket|`string`||  |

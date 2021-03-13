@@ -1,5 +1,5 @@
 resource "aws_s3_bucket_notification" "this" {
-  count = length(var.topic) == 0 && length(var.queue) == 0 && length(var.lambda_function) ? 0 : 1
+  count = length(var.topic) == 0 && length(var.queue) == 0 && length(var.lambda_function) == 0 ? 0 : 1
 
   bucket = var.bucket
 

@@ -1,8 +1,9 @@
 resource "aws_s3_bucket" "this" {
-  bucket = var.name
-  acl    = var.acl
-  policy = var.policy
-  tags   = var.tags
+  bucket        = var.name
+  acl           = var.acl
+  policy        = var.policy
+  tags          = var.tags
+  force_destroy = var.force_destroy
 
   dynamic "versioning" {
     for_each = length(keys(var.versioning)) == 0 ? [] : [var.versioning]

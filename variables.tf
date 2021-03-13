@@ -15,6 +15,12 @@ variable "policy" {
   default     = null
 }
 
+variable "force_destroy" {
+  description = "Whether or not to force destroy the bucket"
+  type        = bool
+  default     = false
+}
+
 variable "tags" {
   description = "Bucket tags"
   type        = map(string)
