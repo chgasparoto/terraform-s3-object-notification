@@ -7,7 +7,7 @@ output "name" {
 }
 
 output "website" {
-  value = aws_s3_bucket.this.website_endpoint
+  value = length(keys(var.website)) > 0 ? aws_s3_bucket_website_configuration.this[0].website_endpoint : aws_s3_bucket.this.bucket_domain_name
 }
 
 output "regional_domain_name" {
@@ -19,7 +19,7 @@ output "domain_name" {
 }
 
 output "website_domain" {
-  value = aws_s3_bucket.this.website_domain
+  value = length(keys(var.website)) > 0 ? aws_s3_bucket_website_configuration.this[0].website_domain : aws_s3_bucket.this.bucket_domain_name
 }
 
 output "hosted_zone_id" {

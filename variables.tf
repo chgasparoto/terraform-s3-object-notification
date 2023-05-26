@@ -1,6 +1,12 @@
 variable "name" {
-  description = "Bucket unique name. It can contain only number, letter and dash."
+  description = "Bucket unique name. It can contain only numbers, letters and dashes"
   type        = string
+}
+
+variable "ownership" {
+  description = "Object ownership. Valid values: BucketOwnerPreferred, ObjectWriter or BucketOwnerEnforced"
+  type        = string
+  default     = "BucketOwnerPreferred"
 }
 
 variable "acl" {
@@ -12,7 +18,7 @@ variable "acl" {
 variable "policy" {
   description = "Bucket policy"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "force_destroy" {
@@ -41,8 +47,19 @@ variable "filepath" {
 
 variable "versioning" {
   description = "Map containing versioning configuration."
-  type        = map(string)
-  default     = {}
+  type = object({
+    expected_bucket_owner = optional(string)
+    status                = optional(string)
+    mfa                   = optional(string)
+    mfa_delete            = optional(string)
+  })
+
+  default = {}
+
+  validation {
+    condition     = var.versioning.status != null ? contains(["Enabled", "Suspended", "Disabled"], var.versioning.status) : true
+    error_message = "Allowed values for versioning.status are \"Enabled\", \"Suspended\", \"Disabled\"."
+  }
 }
 
 variable "website" {

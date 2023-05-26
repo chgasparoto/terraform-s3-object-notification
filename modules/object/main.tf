@@ -1,4 +1,4 @@
-resource "aws_s3_bucket_object" "this" {
+resource "aws_s3_object" "this" {
   for_each = var.filepath != "" ? fileset(var.filepath, "**") : []
 
   bucket       = var.bucket
