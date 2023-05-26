@@ -1,6 +1,7 @@
 locals {
   domain = "my-custom-url.com"
 }
+
 data "template_file" "s3-public-policy" {
   template = file("policy.json")
   vars     = { bucket_name = local.domain }
@@ -21,10 +22,11 @@ module "website" {
   policy = data.template_file.s3-public-policy.rendered
 
   versioning = {
-    enabled = true
+    status = "Enabled"
   }
 
-  files = "${path.root}/../website"
+  filepath = "website"
+
   website = {
     index_document = "index.html"
     error_document = "index.html"

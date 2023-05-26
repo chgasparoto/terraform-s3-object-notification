@@ -5,7 +5,14 @@ Terraform module to handle S3 buckets, bucket objects and bucket notifications r
 These types of resources are supported:
 
 * [S3 Bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket)
-* [S3 Bucket Object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_object)
+* [S3 Bucket Ownership Controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls)
+* [S3 Bucket-level Public Access Block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block)
+* [S3 Bucket ACL](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl)
+* [S3 Bucket Policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy)
+* [S3 Bucket Versioning](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning)
+* [S3 Bucket Website Configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration)
+* [S3 Bucket Logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging)
+* [S3 Object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object)
 * [S3 Bucket Notification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification)
 
 ## Usage
@@ -19,14 +26,14 @@ module "bucket" {
   policy = data.template_file.s3-public-policy.rendered
 
   versioning = {
-    enabled = true
+    status = "Enabled"
   }
 
   # This property activates the module to upload the files to the bucket.
-  filepath = "${path.root}/../website/build/example"
+  filepath = "path/to/my/website/files"
   website = {
     index_document = "index.html"
-    error_document = "index.html"
+    error_document = "error.html"
   }
 
   logging = {
@@ -34,7 +41,7 @@ module "bucket" {
     target_prefix = "access/"
   }
 
-    notification_topic = [{
+  notification_topic = [{
     topic_arn     = aws_sns_topic.topic.arn
     events        = "s3:ObjectCreated:*"
     filter_suffix = ".log"
@@ -65,21 +72,22 @@ module "bucket" {
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.10 |
-| aws | >= 3.0 |
+| terraform | >= 1.0.0 |
+| aws | >= 4.0.0 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 |name|Bucket unique name|`string`|`null`| ✅ |
+|ownership|Object ownership|`string`|`BucketOwnerPreferred`|  |
 |acl|Bucket ACL|`string`|`private`|  |
 |policy|Bucket Policy|`string`||  |
 |force_destroy|Whether or not to force destroy the bucket|`bool`|`false`|  |
 |tags|Bucket Tags|`map(string)`|`{}`|  |
 |key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|`string`||  |
 |filepath|The local path where the desired files will be uploaded to the bucket|`string`||  |
-|versioning|Map containing versioning configuration|`map(string)`|`{}`|  |
+|versioning|Object containing versioning configuration|<pre>object({<br>expected_bucket_owner: string<br>status: string<br>mfa: string<br>mfa_delete: string<br>})</pre>|`{}`|  |
 |website|Map containing website configuration|`map(string)`|`{}`|  |
 |logging|Map containing logging configuration|`map(string)`|`{}`|  |
 |notification_topic|List of maps containing notification_topic configuration|`list(map(string))`|`[{}]`|  |
