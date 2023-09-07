@@ -23,7 +23,11 @@ module "bucket" {
 
   name   = "my-super-unique-bucket-name"
   acl    = "public-read"
-  policy = data.template_file.s3-public-policy.rendered
+  policy = {
+    json = templatefile("policy.json", {
+      bucket_name = local.domain 
+    })
+  }
 
   versioning = {
     status = "Enabled"
@@ -82,7 +86,7 @@ module "bucket" {
 |name|Bucket unique name|`string`|`null`| ✅ |
 |ownership|Object ownership|`string`|`BucketOwnerPreferred`|  |
 |acl|Bucket ACL|`string`|`private`|  |
-|policy|Bucket Policy|`string`||  |
+|policy|Bucket Policy|`object({ json = string })`|| `null` |
 |force_destroy|Whether or not to force destroy the bucket|`bool`|`false`|  |
 |tags|Bucket Tags|`map(string)`|`{}`|  |
 |key_prefix|Prefix to put your key(s) inside the bucket. E.g.: logs -> all files will be uploaded under logs/|`string`||  |

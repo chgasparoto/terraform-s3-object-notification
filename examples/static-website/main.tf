@@ -2,11 +2,6 @@ locals {
   domain = "my-custom-url.com"
 }
 
-data "template_file" "s3-public-policy" {
-  template = file("policy.json")
-  vars     = { bucket_name = local.domain }
-}
-
 module "logs" {
   source = "github.com/chgasparoto/terraform-s3-object-notification"
 
@@ -17,9 +12,11 @@ module "logs" {
 module "website" {
   source = "github.com/chgasparoto/terraform-s3-object-notification"
 
-  name   = local.domain
-  acl    = "public-read"
-  policy = data.template_file.s3-public-policy.rendered
+  name = local.domain
+  acl  = "public-read"
+  policy = {
+    json = templatefile("policy.json", { bucket_name = local.domain })
+  }
 
   versioning = {
     status = "Enabled"
