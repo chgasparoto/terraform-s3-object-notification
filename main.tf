@@ -33,7 +33,7 @@ resource "aws_s3_bucket_acl" "this" {
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  count = var.policy != "" ? 1 : 0
+  count = var.policy != null ? 1 : 0
 
   depends_on = [
     aws_s3_bucket_acl.this,
