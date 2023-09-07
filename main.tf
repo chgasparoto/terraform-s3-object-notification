@@ -33,14 +33,14 @@ resource "aws_s3_bucket_acl" "this" {
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  count = var.policy != "" ? 1 : 0
+  count = var.policy != null ? 1 : 0
 
   depends_on = [
     aws_s3_bucket_acl.this,
   ]
 
   bucket = aws_s3_bucket.this.id
-  policy = var.policy
+  policy = var.policy.json
 }
 
 resource "aws_s3_bucket_versioning" "this" {
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_versioning" "this" {
 }
 
 resource "aws_s3_bucket_logging" "this" {
-  count = length(keys(var.logging))
+  count = length(keys(var.logging)) > 0 ? 1 : 0
 
   bucket        = aws_s3_bucket.this.id
   target_bucket = lookup(var.logging, "target_bucket", null)
@@ -65,7 +65,7 @@ resource "aws_s3_bucket_logging" "this" {
 }
 
 resource "aws_s3_bucket_website_configuration" "this" {
-  count = length(keys(var.website))
+  count = length(keys(var.website)) > 0 ? 1 : 0
 
   bucket = aws_s3_bucket.this.bucket
 
