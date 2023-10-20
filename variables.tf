@@ -9,6 +9,30 @@ variable "ownership" {
   default     = "BucketOwnerPreferred"
 }
 
+variable "block_public_acls" {
+  description = "Whether to block public ACLs"
+  type        = bool
+  default     = true
+}
+
+variable "block_public_policy" {
+  description = "Whether to block public policiy"
+  type        = bool
+  default     = true
+}
+
+variable "ignore_public_acls" {
+  description = "Whether to ignore public ACLs"
+  type        = bool
+  default     = true
+}
+
+variable "restrict_public_buckets" {
+  description = "Whether to restrict public buckets"
+  type        = bool
+  default     = true
+}
+
 variable "acl" {
   description = "Access Control Lists. It defines which AWS accounts or groups are granted access and the type of access"
   type        = string

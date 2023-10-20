@@ -14,6 +14,12 @@ module "website" {
 
   name = local.domain
   acl  = "public-read"
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+
   policy = {
     json = templatefile("policy.json", { bucket_name = local.domain })
   }
