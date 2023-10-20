@@ -8,7 +8,7 @@ resource "aws_lambda_function" "s3" {
   function_name = "s3"
   handler       = "index.handler"
   role          = aws_iam_role.s3.arn
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs18.x"
 
   filename         = data.archive_file.s3.output_path
   source_code_hash = data.archive_file.s3.output_base64sha256
@@ -37,13 +37,6 @@ data "aws_iam_policy_document" "s3" {
     actions = [
       "s3:*"
     ]
-  }
-
-  statement {
-    sid       = "AllowInvokingLambdas"
-    effect    = "Allow"
-    resources = ["arn:aws:lambda:*:*:function:*"]
-    actions   = ["lambda:InvokeFunction"]
   }
 
   statement {

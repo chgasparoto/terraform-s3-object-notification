@@ -4,14 +4,14 @@ Terraform module to handle S3 bucket notifications resources on AWS.
 
 These types of resources are supported:
 
-* [S3 Bucket Notification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification)
+- [S3 Bucket Notification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification)
 
 ## Usage
 
 ```hcl
 module "bucket" {
   source = "github.com/chgasparoto/terraform-s3-object-notification/modules/notification"
-  
+
     bucket          = aws_s3_bucket.this.bucket
     bucket_arn      = aws_s3_bucket.this.arn
 
@@ -42,30 +42,31 @@ module "bucket" {
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 0.12.10 |
-| aws | >= 3.0 |
+| Name      | Version  |
+| --------- | -------- |
+| terraform | >= 1.0.0 |
+| aws       | >= 4.0   |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-|bucket|Bucket unique name|`string`|`null`| ✅ |
-|bucket_arn|Bucket ARN|`string`|`null`| ✅ |
-|topic|List of maps containing topic configuration|`list(map(string))`|`[{}]`|  |
-|queue|List of maps containing queue configuration|`list(map(string))`|`[{}]`|  |
-|lambda_function|List of maps containing lambda_function configuration|`list(map(string))`|`[{}]`|  |
+| Name            | Description                                           |        Type         | Default | Required |
+| --------------- | ----------------------------------------------------- | :-----------------: | :-----: | :------: |
+| bucket          | Bucket unique name                                    |      `string`       | `null`  |    ✅    |
+| bucket_arn      | Bucket ARN                                            |      `string`       | `null`  |    ✅    |
+| topic           | List of maps containing topic configuration           | `list(map(string))` | `[{}]`  |          |
+| queue           | List of maps containing queue configuration           | `list(map(string))` | `[{}]`  |          |
+| lambda_function | List of maps containing lambda_function configuration | `list(map(string))` | `[{}]`  |          |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-|notifications|Set of notifications set on the given S3 bucket|
+| Name          | Description                                     |
+| ------------- | ----------------------------------------------- |
+| notifications | Set of notifications set on the given S3 bucket |
 
 ## Authors
 
 Module managed by [Cleber Gasparoto](https://github.com/chgasparoto)
 
 ## License
+
 [MIT](LICENSE)

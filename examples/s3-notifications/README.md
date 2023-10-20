@@ -1,6 +1,6 @@
 # S3 Notifications
 
-Configuration in this directory creates set of S3 notifications (SNS, SQS and Lambda).
+Configuration in this directory creates a set of S3 notifications (SNS, SQS and Lambda).
 
 ## Usage
 
@@ -16,16 +16,16 @@ Note that this example may create resources which can cost money. Run `terraform
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 0.12.10 |
-| aws | >= 3.0 |
+| Name      | Version  |
+| --------- | -------- |
+| terraform | >= 1.0.0 |
+| aws       | >= 4.0   |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| aws | >= 3.10 |
+| ---- | ------- |
+| aws  | >= 4.0  |
 
 ## Inputs
 
