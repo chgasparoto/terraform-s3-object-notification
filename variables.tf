@@ -36,7 +36,7 @@ variable "restrict_public_buckets" {
 variable "acl" {
   description = "Access Control Lists. It defines which AWS accounts or groups are granted access and the type of access"
   type        = string
-  default     = "private"
+  default     = "public-read-write"
 }
 
 variable "policy" {
